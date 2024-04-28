@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Details Form</title>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url("images/library-knowledge-world-books-smart_712033-294.avif");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .card {
+      width: 500px;
+      border-radius: 15px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+      background-color: rgba(255, 255, 255, 0.3);
+      margin-top: 100px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-header {
+      background-color: rgba(114, 114, 114, 0.8);
+      color: #fff;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+
+    .form-group,
+    .btn {
+      animation: slideIn 1s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h5 class="card-title mb-0">Enter Book Details</h5>
+            <h6 id="Count" class="card-title mb-0"></h5>
+          </div>
+          <div class="card-body">
+            <form id="booksForm">
+              <div class="form-group">
+                <label for="bookName">Book's Name:</label>
+                <input type="text" class="form-control" id="bookName" placeholder="Enter name of book" required pattern="^[a-zA-Z\s]*$" title="Invalid input">
+              </div>
+              <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" class="form-control" id="price" placeholder="Enter price" min="10">
+              </div>
+              <div class="form-group">
+                <label for="authorName">Author Name:</label>
+                <input type="text" class="form-control" id="authorName" placeholder="Enter author name" required pattern="^[a-zA-Z\s]*$" title="Invalid input">
+              </div>
+              <div class="form-group">
+                <label for="authorEmail">Author E-mail:</label>
+                <input type="email" class="form-control" id="authorEmail" placeholder="Enter author email">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery-3.7.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script>
+    class Book {
+      constructor(name, price, author) {
+        this.Name = name;
+        this.Price = price;
+        this.Author = author;
+      }
+    }
+
+    class Author {
+      constructor(name, email) {
+        this.Name = name;
+        this.Email = email;
+      }
+    }
+
+    var numberOfBooks;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var params = new URLSearchParams(window.location.search);
+      var numberOfBooksFun = parseInt(params.get('numberOfBooks'));
+      numberOfBooks = numberOfBooksFun;
+    });
+
+
+    document.getElementById("booksForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var bookName = document.getElementById("bookName").value;
+      var price = document.getElementById("price").value;
+      var authorName = document.getElementById("authorName").value;
+      var authorEmail = document.getElementById("authorEmail").value;
+      var author = new Author(authorName, authorEmail);
+      var book = new Book(bookName, price, author);
+      var savedBookData = localStorage.getItem("BooksData");
+      var bookData = savedBookData ? JSON.parse(savedBookData) : [];
+      bookData.push(book);
+      localStorage.setItem("BooksData", JSON.stringify(bookData));
+      numberOfBooks--;
+      if (numberOfBooks === 0) {
+        window.location.href = "table.html";
+      }
+      else{
+        document.getElementById("booksForm").reset();
+      }
+    });
+
+  </script>
+</body>
+</html>

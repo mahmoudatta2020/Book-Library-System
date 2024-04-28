@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number of Books Form</title>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url("images/library-knowledge-world-books-smart_712033-294.avif");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .card {
+      width: 500px; 
+      border-radius: 15px; 
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5); 
+      background-color: rgba(255, 255, 255, 0.3); 
+      margin-top: 300px; 
+      animation: fadeIn 2s ease;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .card-header {
+      background-color: rgba(114, 114, 114, 0.8); 
+      color: #fff; 
+      border-top-left-radius: 15px; 
+      border-top-right-radius: 15px; 
+    }
+    .form-group,
+    .btn {
+      animation: slideIn 3s ease; 
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h5 class="card-title mb-0">Enter Number of Books</h5>
+          </div>
+          <div class="card-body">
+            <form id="numberOfBooksForm" action="form.html" method="GET">
+              <div class="form-group">
+                <input type="number" class="form-control" id="numberOfBooks" name="numberOfBooks" placeholder="Enter number of books" min="1" max="100" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/jquery-3.7.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <!-- <script>
+    document.getElementById("numberOfBooksForm").addEventListener("submit", function(event) {
+      // event.preventDefault();
+      // var numberOfBooks = document.getElementById("numberOfBooks").value;
+      // window.location.href = "form.html?numberOfBooks=" + numberOfBooks;
+    });
+  </script> -->
+</body>
+</html>

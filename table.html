@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Data</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    .btn-save {
+      background-color: #008CBA;
+      color: white;
+      border: none;
+    }
+
+    .btn-delete {
+      background-color: #f44336;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Book Data</h2>
+  <table id="bookTable">
+    <thead>
+      <tr>
+        <th>Book Name</th>
+        <th>Price</th>
+        <th>Author Name</th>
+        <th>Author Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var bookData = JSON.parse(localStorage.getItem("BooksData")) || [];
+
+
+      function populateTable() {
+        var tableBody = document.querySelector("#bookTable tbody");
+        tableBody.innerHTML = "";
+
+        bookData.forEach(function (book, index) {
+          var row = document.createElement("tr");
+          row.innerHTML = `
+            <td><input type="text" value="${book.Name}" id="name${index}" disabled "></td>
+            <td><input type="number" value="${book.Price}" id="price${index}" disabled></td>
+            <td><input type="text" value="${book.Author.Name}" id="authorName${index}" disabled "></td>
+            <td><input type="email" value="${book.Author.Email}" id="authorEmail${index}" disabled></td>
+            <td>
+              <button class="btn btn-edit" onclick="editBook(${index})">Edit</button>
+              <button class="btn btn-save" onclick="saveBook(${index})" style="display:none;">Save</button>
+              <button class="btn btn-delete" onclick="deleteBook(${index})">Delete</button>
+              <button class="btn btn-cancel" onclick="cancelBook(${index})" style="display:none;">Cancel</button>
+            </td>
+          `;
+          tableBody.append(row);
+        });
+      }
+      populateTable();
+
+      window.editBook = function (index) {
+        var editBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-edit`);
+        var deleteBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-delete`);
+        var saveBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-save`);
+        var cancelBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-cancel`);
+        editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+        cancelBtn.style.display = "inline-block";
+        var inputs = document.querySelectorAll(`#bookTable tbody tr:nth-child(${index + 1}) input`);
+        inputs.forEach(input => {
+          input.disabled = false;
+        });
+      };
+
+      window.saveBook = function (index) {
+        var saveBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-save`);
+        var editBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-edit`);
+        var deleteBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-edit`);
+        var cancelBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-edit`);
+        saveBtn.style.display = "none";
+        cancelBtn.style.display = "none";
+        editBtn.style.display = "inline-block";
+        deleteBtn.style.display = "inline-block";
+        var inputs = document.querySelectorAll(`#bookTable tbody tr:nth-child(${index + 1}) input`);
+
+      var book = {
+        Name: inputs[0].value,
+        Price: inputs[1].value,
+        Author: {
+          Name: inputs[2].value,
+          Email: inputs[3].value
+        }
+
+      };
+      bookData[index] = book;
+      localStorage.setItem("BooksData", JSON.stringify(bookData));
+      populateTable();
+    };
+
+    window.deleteBook = function (index) {
+      if (confirm("Are you sure you want to delete this book?")) {
+        bookData.splice(index, 1);
+        localStorage.setItem("BooksData", JSON.stringify(bookData));
+        populateTable();
+      }
+    };
+    window.cancelBook = function (index) {
+      var cancelBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-cancel`);
+      var editBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-edit`);
+      var deleteBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-delete`);
+      var saveBtn = document.querySelector(`#bookTable tbody tr:nth-child(${index + 1}) .btn-save`);
+
+      cancelBtn.style.display = "none";
+      editBtn.style.display = "inline-block";
+      deleteBtn.style.display = "inline-block";
+      saveBtn.style.display = "none";
+
+      var inputs = document.querySelectorAll(`#bookTable tbody tr:nth-child(${index + 1}) input`);
+      inputs.forEach(input => {
+        input.disabled = true;
+      });
+
+      var book = bookData[index];
+      inputs[0].value = book.Name;
+      inputs[1].value = book.Price;
+      inputs[2].value = book.Author.Name;
+      inputs[3].value = book.Author.Email;
+    };
+    });
+  </script>
+</body>
+
+</html>
